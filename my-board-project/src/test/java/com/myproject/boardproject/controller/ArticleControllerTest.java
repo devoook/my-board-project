@@ -34,7 +34,7 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("articles"));
     }
-    @Disabled("구현중")
+
     @DisplayName("[view][GET] 게시글 상세 리스트 (게시판) 페이지 - 정상 호출  ")
     @Test
     void givenNothing_whenRequestingArticleView_thenReturnsArticlesView() throws Exception {

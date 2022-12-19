@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 페이지</title>
+</head>
+<body>
+
+    <header id="header"></header>
+
+    <main>
+       <header>
+           <h1>첫번째 글</h1>
+       </header>
+        <aside>
+            <p><span>DEV</span></p>
+            <p><a href="mailto:dev@dev.com">dev@dev.com</a></p>
+            <p><time datetime="2022-01-01T00:00:00">2022-01-01</time> </p>
+            <p>#java</p>
+        </aside>
+
+        <section>
+            <p>본문 <br><br></p>
+            <form>
+                <label for="articleComment" hidden>댓글</label>
+                <textarea id="articleComment" placeholder="댓글 쓰기.."></textarea>
+                <button type="submit">쓰기</button>
+            </form>
+
+            <ul>
+                <li>
+                    <div>
+                        <time><small>2022-01-01</small></time>
+                        <strong>DEV</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi, architecto dolores,
+                            error excepturi exercitationem explicabo nemo neque nesciunt nisi odio odit, officia perspiciatis
+                            qui quod saepe soluta totam ut!
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <time><small>2022-01-01</small></time>
+                        <strong>DEV</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet animi, architecto dolores,
+                            error excepturi exercitationem explicabo nemo neque nesciunt nisi odio odit, officia perspiciatis
+                            qui quod saepe soluta totam ut!
+                        </p>
+                    </div>
+                </li>
+            </ul>
+
+            <nav>
+              <a href="#">이전 글</a>
+              <a href="#">다음 글</a>
+            </nav>
+        </section>
+
+    </main>
+
+    <footer id="footer"> </footer>
+
+</body>
+</html>
