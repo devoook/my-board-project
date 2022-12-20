@@ -1,5 +1,6 @@
 package com.myproject.boardproject.dto;
 
+import com.myproject.boardproject.domain.Article;
 import com.myproject.boardproject.domain.ArticleComment;
 
 import java.time.LocalDateTime;
@@ -22,8 +23,20 @@ public record ArticleCommentDto(
         return new ArticleCommentDto(
                 entity.getId(),
                 entity.getArticle().getId(),
-                UserAccountDto.from(entity.getUserAccount)
+                UserAccountDto.from(entity.getUserAccount()),
+                entity.getContent(),
+                entity.getCreatedAt(),
+                entity.getCreatedBy(),
+                entity.getModifiedAt(),
+                entity.getModifiedBy()
+        );
+    }
 
+    public ArticleComment toEntity(Article entity) {
+        return ArticleComment.of(
+                entity,
+                userAccountDto.toEntity(),
+                content
         );
     }
 

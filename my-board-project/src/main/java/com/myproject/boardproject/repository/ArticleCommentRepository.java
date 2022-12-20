@@ -10,12 +10,17 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 @RepositoryRestResource
 public interface ArticleCommentRepository
         extends JpaRepository<ArticleComment,Long>
         , QuerydslPredicateExecutor<ArticleComment> // Entity의 기본 검색기능 추가해줌.
         , QuerydslBinderCustomizer<QArticleComment>  // QClass로 커스텀 검색기능 만들기 위함.
 {
+
+    List<ArticleComment> findByArticle_Id(Long articleId);
+
     @Override
     default void customize(QuerydslBindings bindings, QArticleComment root) {
         bindings.excludeUnlistedProperties(true); // 손택적으로 검색하기 위함.

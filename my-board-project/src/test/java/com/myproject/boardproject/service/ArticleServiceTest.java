@@ -4,7 +4,8 @@ import com.myproject.boardproject.domain.Article;
 import com.myproject.boardproject.domain.UserAccount;
 import com.myproject.boardproject.domain.type.SearchType;
 import com.myproject.boardproject.dto.ArticleDto;
-import com.myproject.boardproject.dto.ArticleUpdateDto;
+import com.myproject.boardproject.dto.ArticleWithCommentsDto;
+import com.myproject.boardproject.dto.UserAccountDto;
 import com.myproject.boardproject.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.Pageable;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -209,4 +213,4 @@ class ArticleServiceTest {
     }
 
 }
-}
+
