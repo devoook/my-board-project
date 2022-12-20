@@ -18,8 +18,12 @@ public interface ArticleRepository extends
         , QuerydslPredicateExecutor<Article> // Entity의 기본 검색기능 추가해줌.
         , QuerydslBinderCustomizer<QArticle>  // QClass
 {
-
-    Page<Article> findByTitle(String title, Pageable pageable);
+    // containing 을 사용하여 부분검색 허용
+    Page<Article> findByTitleContaining(String title, Pageable pageable);
+    Page<Article> findByContentContaining(String content, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String nickname, Pageable pageable);
+    Page<Article> findByHashtag(String hashtag, Pageable pageable);
 
     @Override
     default void customize(QuerydslBindings bindings, QArticle root) {
