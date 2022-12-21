@@ -40,6 +40,7 @@ public class ArticleController {
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", barNumbers);
+        map.addAttribute("SearchTypes", SearchType.values());  // values() 사용하여 enum의 값을 array로 전달
         return "articles/index";
     }
 
