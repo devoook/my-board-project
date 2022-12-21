@@ -4,6 +4,7 @@ import com.myproject.boardproject.config.SecurityConfig;
 import com.myproject.boardproject.dto.ArticleWithCommentsDto;
 import com.myproject.boardproject.dto.UserAccountDto;
 import com.myproject.boardproject.service.ArticleService;
+import com.myproject.boardproject.service.PaginationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +35,7 @@ class ArticleControllerTest {
     private final MockMvc mvc;
     // Spring slice Test에서 사용. 해당 테스트에선 Service에 의종하지 않기 위해 사용했다.
     @MockBean private ArticleService articleService;
+    @MockBean private PaginationService paginationService;
 
     public ArticleControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
@@ -46,13 +48,16 @@ class ArticleControllerTest {
      void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
         //given
         given(articleService.searchArticles(eq(null), eq(null) , any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
         //when & then
         mvc.perform(get("/articles"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("articles/index"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("articles"));
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("paginationBarNumbers"));
         then(articleService.searchArticles(eq(null), eq(null), any(Pageable.class)));
+        then(paginationService.getPaginationBarNumbers(anyInt(), anyInt()));
     }
 
     @DisplayName("[view][GET] 게시글 상세 리스트 (게시판) 페이지 - 정상 호출  ")
