@@ -2,6 +2,7 @@ package com.myproject.boardproject.repository;
 
 import com.myproject.boardproject.domain.Article;
 import com.myproject.boardproject.domain.QArticle;
+import com.myproject.boardproject.repository.querydsl.ArticleRepositoryCustom;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ public interface ArticleRepository extends
         JpaRepository<Article, Long>
         , QuerydslPredicateExecutor<Article> // Entity의 기본 검색기능 추가해줌.
         , QuerydslBinderCustomizer<QArticle>  // QClass
+    , ArticleRepositoryCustom
 {
     // containing 을 사용하여 부분검색 허용
     Page<Article> findByTitleContaining(String title, Pageable pageable);
