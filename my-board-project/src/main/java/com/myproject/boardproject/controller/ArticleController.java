@@ -39,7 +39,7 @@ public class ArticleController {
     public String articles(@PathVariable Long articleId, ModelMap map) {
         // response 객체로 변환한다.
         ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
-        map.addAttribute("article", article.hashtag());
+        map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponses());
         return "articles/detail";
     }
