@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,11 +26,12 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class ArticleCommentServiceTest {
 
-    @InjectMocks private ArticleCommentService sut;
+    @InjectMocks
+    private ArticleCommentService sut;
 
+    @Mock
+    private ArticleRepository articleRepository;
     @Mock private ArticleCommentRepository articleCommentRepository;
-    @Mock private ArticleRepository articleRepository;
-
 
     @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
@@ -146,7 +146,6 @@ class ArticleCommentServiceTest {
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                1L,
                 "uno",
                 "password",
                 "uno@mail.com",
@@ -185,6 +184,5 @@ class ArticleCommentServiceTest {
                 "#java"
         );
     }
-
 
 }

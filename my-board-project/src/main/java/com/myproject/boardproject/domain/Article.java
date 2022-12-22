@@ -25,7 +25,7 @@ public class Article extends AuditingFields{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter @ManyToOne(optional = false)
+    @Setter @ManyToOne(optional = false) @JoinColumn(name = "userId")
     private UserAccount userAccount;
 
     @Setter

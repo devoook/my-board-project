@@ -2,7 +2,6 @@ package com.myproject.boardproject.controller;
 
 import com.myproject.boardproject.domain.constant.FormStatus;
 import com.myproject.boardproject.domain.constant.SearchType;
-import com.myproject.boardproject.dto.ArticleDto;
 import com.myproject.boardproject.dto.UserAccountDto;
 import com.myproject.boardproject.dto.request.ArticleRequest;
 import com.myproject.boardproject.dto.response.ArticleResponse;
@@ -48,9 +47,11 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public String articles(@PathVariable Long articleId, ModelMap map) {
         // response 객체로 변환한다.
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithComments(articleId));
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponses());
+        map.addAttribute("totalCount", articleService.getArticleCount());
+
         return "articles/detail";
     }
 
@@ -104,10 +105,10 @@ public class ArticleController {
         articleService.updateArticle(articleId, articleRequest.toDto(UserAccountDto.of(
                 "dev", "1234", "dev@dev.com", "Dev", "memo", null, null, null, null
         )));
-        return "redirect:/articles" + articleId;
+        return "redirect:/articles/" + articleId;
     }
 
-    @PostMapping("/{articleId/delete")
+    @PostMapping("/{articleId}/delete")
     public String deleteArticle(@PathVariable Long articleId) {
         // TODO: 인증 정보 넣어줄 것
         articleService.deleteArticle(articleId);
