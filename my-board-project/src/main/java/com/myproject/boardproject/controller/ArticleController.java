@@ -1,6 +1,10 @@
 package com.myproject.boardproject.controller;
 
-import com.myproject.boardproject.domain.type.SearchType;
+import com.myproject.boardproject.domain.constant.FormStatus;
+import com.myproject.boardproject.domain.constant.SearchType;
+import com.myproject.boardproject.dto.ArticleDto;
+import com.myproject.boardproject.dto.UserAccountDto;
+import com.myproject.boardproject.dto.request.ArticleRequest;
 import com.myproject.boardproject.dto.response.ArticleResponse;
 import com.myproject.boardproject.dto.response.ArticleWithCommentsResponse;
 import com.myproject.boardproject.service.ArticleService;
@@ -13,10 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ArticleController {
     public String articles(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchValue,
-            @PageableDefault(size=10,sort="createdAt", direction= Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {// response 객체로 변환한다.
         Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
@@ -54,9 +55,9 @@ public class ArticleController {
     }
 
     @GetMapping("/search-hashtag")
-    public String searchHashtag(
+    public String searchArticleHashtag(
             @RequestParam(required = false) String searchValue,
-            @PageableDefault(size=10,sort="createdAt", direction= Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {
         Page<ArticleResponse> articles = articleService.searchArticlesViaHashtag(searchValue, pageable).map(ArticleResponse::from);
@@ -71,4 +72,45 @@ public class ArticleController {
         return "articles/search-hashtag";
     }
 
+    @GetMapping("/form")
+    public String articleForm(ModelMap map) {
+        map.addAttribute("formStatus", FormStatus.CREATE);
+        return "articles/form";
+    }
+
+    @PostMapping("/form")
+    public String postNewArticle(ArticleRequest articleRequest) {
+        // TODO: 인증 정보를 넣어줄 것
+        // articleRequest & userAccount => ArticleDto
+        articleService.saveArticle(articleRequest.toDto(UserAccountDto.of(
+                "dev", "1234", "dev@dev.com", "Dev", "memo", null, null, null, null
+        )));
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/{articleId}/form")
+    public String updateArticleForm(@PathVariable Long articleId, ModelMap map) {
+        ArticleResponse article = ArticleResponse.from(articleService.getArticle(articleId));
+
+        map.addAttribute("article", article);
+        map.addAttribute("formStatus", FormStatus.UPDATE);
+
+        return "articles/form";
+    }
+
+    @PostMapping("/{articleId}/form")
+    public String updateArticle(@PathVariable Long articleId, ArticleRequest articleRequest) {
+        // TODO: 인증 정보 넣어줄 것.
+        articleService.updateArticle(articleId, articleRequest.toDto(UserAccountDto.of(
+                "dev", "1234", "dev@dev.com", "Dev", "memo", null, null, null, null
+        )));
+        return "redirect:/articles" + articleId;
+    }
+
+    @PostMapping("/{articleId/delete")
+    public String deleteArticle(@PathVariable Long articleId) {
+        // TODO: 인증 정보 넣어줄 것
+        articleService.deleteArticle(articleId);
+        return "redirect:/articles";
+    }
 }

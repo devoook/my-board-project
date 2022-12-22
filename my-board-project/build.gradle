@@ -30,6 +30,9 @@ dependencies {
     implementation 'org.springframework.data:spring-data-rest-hal-explorer'
 
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     // queryDSL 설정
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-core"
