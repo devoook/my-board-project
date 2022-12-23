@@ -1,15 +1,19 @@
 package com.myproject.boardproject.repository;
 
-import com.myproject.boardproject.config.JpaConfig;
 import com.myproject.boardproject.domain.Article;
 import com.myproject.boardproject.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // DataJpaTest 의 테스트 DB 사용하지 않고 yml testdb 설정 사용 위해...
 @DisplayName("JPA 연결 테스트 ")
-@Import(JpaConfig.class)
+@Import(JpaRepositoryTest.TestJpaConfig.class) // 스프링 시큐리티 적용후 테스트를 위함.
 @DataJpaTest // 내부의 SpringExtension 덕에  생성자 주입 가능해짐 & transactional
 class JpaRepositoryTest {
 
@@ -97,5 +101,15 @@ class JpaRepositoryTest {
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
         assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentSize);
     }
+
+    @EnableJpaAuditing
+    @TestConfiguration // 테스트 시에만 빈등록
+    public static class TestJpaConfig {
+        @Bean
+        public AuditorAware<String> auditorAware() {
+            return () -> Optional.of("dev");
+        }
+    }
+
 
 }
