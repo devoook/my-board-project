@@ -11,10 +11,11 @@ public record ArticleResponse(
         String hashtag,
         LocalDateTime createdAt,
         String email,
-        String nickname
+        String nickname,
+        String userId
 ) {
-    public static ArticleResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname) {
-        return new ArticleResponse(id, title, content, hashtag, createdAt, email, nickname);
+    public static ArticleResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname,String userId) {
+        return new ArticleResponse(id, title, content, hashtag, createdAt, email, nickname,userId);
     }
 
     public static ArticleResponse from(ArticleDto dto) {
@@ -29,7 +30,8 @@ public record ArticleResponse(
                 dto.hashtag(),
                 dto.createdAt(),
                 dto.userAccountDto().email(),
-                nickname
+                nickname,
+                dto.userAccountDto().userId()
         );
     }
 
